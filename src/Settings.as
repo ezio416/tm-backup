@@ -21,7 +21,7 @@ void Settings_General() {
 
     UI::Separator();
 
-    UI::TextWrapped("Toggle individual file backups here.\nTimestamps on backed up files are in UTC.");
+    UI::TextWrapped("Toggle individual file backups here\nTimestamps on backed up files are in UTC\nFiles are only backed up if they differ from their latest backup");
 
     S_Gui = UI::Checkbox("GUI", S_Gui);
     HoverTooltipSetting(guiFile);
