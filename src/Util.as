@@ -1,5 +1,5 @@
 // c 2024-07-04
-// m 2024-07-04
+// m 2024-07-20
 
 void FileAppend(const string &in path, const string &in contents) {
     IO::File file(path, IO::FileMode::Append);
@@ -31,4 +31,9 @@ void HoverTooltip(const string &in msg) {
     UI::BeginTooltip();
         UI::Text(msg);
     UI::EndTooltip();
+}
+
+void Log(const string &in msg) {
+    if (S_Debug)
+        trace(msg);
 }

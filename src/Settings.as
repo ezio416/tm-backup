@@ -1,10 +1,11 @@
 // c 2024-07-04
-// m 2024-07-10
+// m 2024-07-20
 
+[Setting hidden] bool S_Debug    = false;
 [Setting hidden] bool S_Enabled  = true;
 [Setting hidden] bool S_Gui      = true;
 [Setting hidden] bool S_Log      = false;
-[Setting hidden] bool S_OldLog   = true;
+[Setting hidden] bool S_OldLog   = false;
 [Setting hidden] bool S_Settings = true;
 
 [SettingsTab name="General" icon="Cogs"]
@@ -46,6 +47,11 @@ void Settings_General() {
     if (UI::Button(Icons::ExternalLink + " Open backup folder"))
         OpenExplorerPath(backupFolder);
     HoverTooltip(backupFolder);
+
+    UI::Separator();
+
+    S_Debug = UI::Checkbox("Debug logging", S_Debug);
+    HoverTooltipSetting("Prints more to the log for debugging purposes");
 }
 
 void HoverTooltipSetting(const string &in msg, const string &in color = "666") {
