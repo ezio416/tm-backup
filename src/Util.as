@@ -1,10 +1,10 @@
-void FileAppend(const string &in path, const string &in contents) {
+void FileAppend(const string&in path, const string&in contents) {
     IO::File file(path, IO::FileMode::Append);
     file.Write(contents);
     file.Close();
 }
 
-string FileRead(const string &in path) {
+string FileRead(const string&in path) {
     if (!IO::FileExists(path)) {
         warn("file not found: " + path);
         return "";
@@ -17,20 +17,22 @@ string FileRead(const string &in path) {
     return contents;
 }
 
-string ForSlash(const string &in path) {
+string ForSlash(const string&in path) {
     return path.Replace("\\", "/");
 }
 
-void HoverTooltip(const string &in msg) {
-    if (!UI::IsItemHovered())
+void HoverTooltip(const string&in msg) {
+    if (!UI::IsItemHovered()) {
         return;
+    }
 
     UI::BeginTooltip();
-        UI::Text(msg);
+    UI::Text(msg);
     UI::EndTooltip();
 }
 
-void Log(const string &in msg) {
-    if (S_Debug)
+void Log(const string&in msg) {
+    if (S_Debug) {
         trace(msg);
+    }
 }

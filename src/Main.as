@@ -9,8 +9,9 @@ const string timestampsFile = ForSlash(IO::FromStorageFolder("timestamps.json"))
 Json::Value@ timestamps;
 
 void OnSettingsSave(Settings::Section& section) {
-    if (!S_Enabled)
+    if (!S_Enabled) {
         return;
+    }
 
     @timestamps = LoadTimestamps();
 
@@ -20,37 +21,45 @@ void OnSettingsSave(Settings::Section& section) {
 }
 
 void BackupAsync() {
-    while (running)
+    while (running) {
         yield();
+    }
 
     running = true;
 
     const string now = Time::FormatStringUTC("%Y_%m_%d_%H_%M_%SZ_", Time::Stamp);
 
-    if (S_Gui)
+    if (S_Gui) {
         BackupIfChangedAsync("Gui.ini", guiFile, now);
+    }
 
-    if (S_Log)
+    if (S_Log) {
         BackupIfChangedAsync("Openplanet.log", logFile, now);
+    }
 
-    if (S_OldLog)
+    if (S_OldLog) {
         BackupIfChangedAsync("Openplanet-old.log", oldLogFile, now);
+    }
 
-    if (S_Settings)
+    if (S_Settings) {
         BackupIfChangedAsync("Settings.ini", settingsFile, now);
+    }
 
     sleep(1000);  // in case settings are saved twice in the same second (unlikely), this ensures new backup files are always created
 
     running = false;
 }
 
-void BackupIfChangedAsync(const string &in name, const string &in file, const string &in now) {
+void BackupIfChangedAsync(const string&in name, const string&in file, const string&in now) {
     const int64 currentModifyTime = IO::FileModifiedTime(file);
     const int64 oldModifyTime = timestamps.HasKey(name) ? int64(timestamps[name]) : 0;
 
     Log("BackupIfChanged: " + name + " | currentModifyTime " + currentModifyTime + " | oldModifyTime: " + oldModifyTime + " (diff of " + (currentModifyTime - oldModifyTime) + "s)");
 
-    if (!timestamps.HasKey(name) || currentModifyTime != oldModifyTime) {
+    if (false
+        or !timestamps.HasKey(name)
+        or currentModifyTime != oldModifyTime
+    ) {
         trace(name);
         FileAppend(backupFolder + now + name, FileRead(file));
         yield();
@@ -66,7 +75,10 @@ Json::Value@ LoadTimestamps() {
     }
 
     Json::Value@ ts = Json::FromFile(timestampsFile);
-    if (ts is null || ts.GetType() != Json::Type::Object) {
+    if (false
+        or ts is null
+        or ts.GetType() != Json::Type::Object
+    ) {
         warn("LoadTimestamps: file empty or invalid");
         try {
             IO::Delete(timestampsFile);

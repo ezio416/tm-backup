@@ -10,8 +10,9 @@ void Settings_General() {
     if (UI::Button("Reset to default")) {
         Meta::PluginSetting@[]@ settings = Meta::ExecutingPlugin().GetSettings();
 
-        for (uint i = 0; i < settings.Length; i++)
+        for (uint i = 0; i < settings.Length; i++) {
             settings[i].Reset();
+        }
     }
 
     S_Enabled = UI::Checkbox("Enabled", S_Enabled);
@@ -36,13 +37,15 @@ void Settings_General() {
 
     UI::Separator();
 
-    if (UI::Button(Icons::ExternalLink + " Open Openplanet folder"))
+    if (UI::Button(Icons::ExternalLink + " Open Openplanet folder")) {
         OpenExplorerPath(opFolder);
+    }
     HoverTooltip(opFolder);
 
     UI::SameLine();
-    if (UI::Button(Icons::ExternalLink + " Open backup folder"))
+    if (UI::Button(Icons::ExternalLink + " Open backup folder")) {
         OpenExplorerPath(backupFolder);
+    }
     HoverTooltip(backupFolder);
 
     UI::Separator();
@@ -51,11 +54,12 @@ void Settings_General() {
     HoverTooltipSetting("Prints more to the log for debugging purposes");
 }
 
-void HoverTooltipSetting(const string &in msg, const string &in color = "666") {
+void HoverTooltipSetting(const string&in msg, const string&in color = "666") {
     UI::SameLine();
     UI::Text("\\$" + color + Icons::QuestionCircle);
-    if (!UI::IsItemHovered())
+    if (!UI::IsItemHovered()) {
         return;
+    }
 
     UI::SetNextWindowSize(int(Math::Min(Draw::MeasureString(msg).x, 400.0f)), 0.0f);
     UI::BeginTooltip();
