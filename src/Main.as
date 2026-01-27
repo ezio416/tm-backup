@@ -1,6 +1,3 @@
-// c 2024-07-04
-// m 2024-07-20
-
 const string backupFolder   = ForSlash(IO::FromStorageFolder("backups/"));
 const string guiFile        = ForSlash(IO::FromDataFolder("Gui.ini"));
 const string logFile        = ForSlash(IO::FromDataFolder("Openplanet.log"));

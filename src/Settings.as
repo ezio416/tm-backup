@@ -1,6 +1,3 @@
-// c 2024-07-04
-// m 2024-07-20
-
 [Setting hidden] bool S_Debug    = false;
 [Setting hidden] bool S_Enabled  = true;
 [Setting hidden] bool S_Gui      = true;
