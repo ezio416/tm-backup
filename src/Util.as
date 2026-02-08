@@ -10,11 +10,15 @@ string FileRead(const string&in path) {
         return "";
     }
 
-    IO::File file(path, IO::FileMode::Read);
-    const string contents = file.ReadToEnd();
-    file.Close();
-
-    return contents;
+    try {
+        IO::File file(path, IO::FileMode::Read);
+        const string contents = file.ReadToEnd();
+        file.Close();
+        return contents;
+    } catch {
+        error("failed to read file (" + path + "): " + getExceptionInfo());
+        return "";
+    }
 }
 
 string ForSlash(const string&in path) {
