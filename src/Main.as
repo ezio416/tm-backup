@@ -38,7 +38,7 @@ void BackupAsync() {
     }
 
     if (S_OldLog) {
-        BackupIfChangedAsync("Openplanet-old.log", oldLogFile, now);
+        BackupIfChangedAsync("Openplanet-Old.log", oldLogFile, now);
     }
 
     if (S_Settings) {
