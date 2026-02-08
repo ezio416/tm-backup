@@ -31,6 +31,7 @@ void Settings_General() {
 
     S_OldLog = UI::Checkbox("Old log", S_OldLog);
     HoverTooltipSetting(oldLogFile);
+    HoverTooltipSetting("Can quickly take up space on your storage drive", "FA0");
 
     S_Settings = UI::Checkbox("Settings", S_Settings);
     HoverTooltipSetting(settingsFile);
