@@ -1,30 +1,3 @@
-void FileAppend(const string&in path, const string&in contents) {
-    IO::File file(path, IO::FileMode::Append);
-    file.Write(contents);
-    file.Close();
-}
-
-string FileRead(const string&in path) {
-    if (!IO::FileExists(path)) {
-        warn("file not found: " + path);
-        return "";
-    }
-
-    try {
-        IO::File file(path, IO::FileMode::Read);
-        const string contents = file.ReadToEnd();
-        file.Close();
-        return contents;
-    } catch {
-        error("failed to read file (" + path + "): " + getExceptionInfo());
-        return "";
-    }
-}
-
-string ForSlash(const string&in path) {
-    return path.Replace("\\", "/");
-}
-
 void HoverTooltip(const string&in msg) {
     if (!UI::IsItemHovered()) {
         return;

@@ -1,21 +1,23 @@
-const string backupFolder   = ForSlash(IO::FromStorageFolder("backups/"));
-const string guiFile        = ForSlash(IO::FromDataFolder("Gui.ini"));
-const string logFile        = ForSlash(IO::FromDataFolder("Openplanet.log"));
-const string oldLogFile     = ForSlash(IO::FromDataFolder("Openplanet-old.log"));
-const string opFolder       = ForSlash(IO::FromDataFolder(""));
+const string backupFolder   = IO::FromStorageFolder("backups/");
+const string guiFile        = IO::FromDataFolder("Gui.ini");
+const string logFile        = IO::FromDataFolder("Openplanet.log");
+const string oldLogFile     = IO::FromDataFolder("Openplanet-Old.log");
+const string opFolder       = IO::FromDataFolder("");
 bool         running        = false;
-const string settingsFile   = ForSlash(IO::FromDataFolder("Settings.ini"));
-const string timestampsFile = ForSlash(IO::FromStorageFolder("timestamps.json"));
+const string settingsFile   = IO::FromDataFolder("Settings.ini");
+const string timestampsFile = IO::FromStorageFolder("timestamps.json");
 Json::Value@ timestamps;
 
-void OnSettingsSave(Settings::Section& section) {
+void OnSettingsSave(Settings::Section&) {
     if (!S_Enabled) {
         return;
     }
 
     @timestamps = LoadTimestamps();
 
-    IO::CreateFolder(backupFolder);
+    if (!IO::FolderExists(backupFolder)) {
+        IO::CreateFolder(backupFolder);
+    }
 
     startnew(BackupAsync);
 }
@@ -54,15 +56,23 @@ void BackupIfChangedAsync(const string&in name, const string&in file, const stri
     const int64 currentModifyTime = IO::FileModifiedTime(file);
     const int64 oldModifyTime = timestamps.HasKey(name) ? int64(timestamps[name]) : 0;
 
-    Log("BackupIfChanged: " + name + " | currentModifyTime " + currentModifyTime + " | oldModifyTime: " + oldModifyTime + " (diff of " + (currentModifyTime - oldModifyTime) + "s)");
+    Log("BackupIfChanged: " + name + " | currentModifyTime " + currentModifyTime + " | oldModifyTime: "
+        + oldModifyTime + " (diff of " + (currentModifyTime - oldModifyTime) + "s)");
 
     if (false
         or !timestamps.HasKey(name)
         or currentModifyTime != oldModifyTime
     ) {
         trace(name);
-        FileAppend(backupFolder + now + name, FileRead(file));
-        yield();
+
+        try {
+            IO::Copy(file, backupFolder + now + name);
+            yield();
+        } catch {
+            error("failed to back up (" + name + "):" + getExceptionInfo());
+            return;
+        }
+
         timestamps[name] = currentModifyTime;
         SaveTimestamps();
     }
